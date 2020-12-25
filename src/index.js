@@ -1,44 +1,59 @@
-import { precompile } from 'handlebars';
-import { doc, resolveConfigFile } from 'prettier';
 import './styles.css';
-import pokemonCardsHbs from './templates/pokemons.hbs';
-import API from './js/api-service';
+import oneCountryId from './templates/country.hbs';
+import countriesId from './templates/countries.hbs';
+import debounce from 'lodash.debounce'
+import API from './js/fetchCountries';
 import getRefs from "./js/refs";
 
 const refs = getRefs();
 
-refs.searchForm.addEventListener('submit', onSearch);
+refs.searchForm.addEventListener('input', debounce(onSearch, 500));
 
 function onSearch(e) {
 	e.preventDefault();
 
-	const form = e.currentTarget;
-	const searchQuery = form.elements.query.value
+	
+	const searchQuery = refs.searchForm.value;
 
-	API.fetchPokemonById(searchQuery)
-		.then(renderPokemonCard)
+	API.fetchCountries(searchQuery)
+		.then(checkFindItems)
 		.catch(onFetchError)
-		.finally(() => form.reset())	
 }
 
-function renderPokemonCard(pokemon) {
-	const markup = pokemonCardsHbs(pokemon);
-	refs.cardContainer.innerHTML = markup;
+function checkFindItems(country) {
+	refs.cardContainer.innerHTML = '';
+
+	if (country.length > 10) {
+		 alert('Something wrong');
+	} else if (country.length > 1 && country.lenth <= 10) {
+		renderCountriesList(country);
+	} else {
+		renderCountryCard(country);
+	}
+};
+function renderCountriesList(country) {
+	const markup = countriesId(country);
+	refs.cardContainer.insertAdjacentHTML('beforeend', markup);
 };
 
+function renderCountryCard(country) {
+	const markupIdCard = oneCountryId(country);
+	
+	refs.cardContainer.insertAdjacentHTML('beforeend', markupIdCard);
+};
+
+
+
+
 function onFetchError(error) {
-	alert('Упс, что-то пошло не так, не нашли покемона :(');
-}
-
-
-//=================================
-
-const options = {
-	headers: {
-		Authorization: 'f02d8915a16846249a14dd6bbace404f'
+	if (error === 404) {
+		alert('Nothing found')
+	} else {
+		alert('something happend. Try later')
 	}
-}
+};
 
-fetch(`https://newsapi.org/v2/everything?q=cat&language=ru&pageSize=5&page=1`, options)
-	.then(r => r.json())
-	.then(console.log)
+
+
+
+
