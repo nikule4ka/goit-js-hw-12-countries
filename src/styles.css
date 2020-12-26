@@ -65,3 +65,48 @@ body {
   fill: rgba(0, 0, 0, 0.39);
   transition: fill 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.js-card-container {
+  padding: 20px;
+}
+
+.country-name {
+  color: white;
+  text-align: center;
+  font-size: 30px;
+}
+
+.card-title {
+  color: white;
+  margin-top: 0;
+  text-align: center;
+  font-size: 25px;
+}
+
+.list-groupp-item {
+  list-style: none;
+  color: white;
+  text-align: center;
+}
+
+.card-text {
+  color: white;
+  text-align: center;
+}
+
+.card-img-top {
+  display: block;
+  text-align: center;
+  justify-content: space-around;
+}
+
+.container {
+  display: block;
+}
+
+.list-item {
+  color: white;
+  text-align: center;
+  list-style: none;
+  font-size: 25px;
+}
